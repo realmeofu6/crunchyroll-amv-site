@@ -1,30 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crunchyroll AMV Auto</title>
-</head>
-<body>
-    <h1>Crunchyroll AMV Auto-Clipping</h1>
-    <button onclick="fetchVideos()">Fetch Clips</button>
-    <div id="video-container"></div>
+import { useState } from "react";
 
-    <script>
-        async function fetchVideos() {
-            let response = await fetch('https://api.github.com/repos/your-username/crunchyroll-amv-auto/releases/latest');
-            let data = await response.json();
-            let videoContainer = document.getElementById('video-container');
-            videoContainer.innerHTML = "";
+export default function Home() {
+  const [user, setUser] = useState(null);
+  const [clips, setClips] = useState([]);
 
-            data.assets.forEach(asset => {
-                let video = document.createElement("video");
-                video.src = asset.browser_download_url;
-                video.controls = true;
-                video.width = 320;
-                videoContainer.appendChild(video);
-            });
-        }
-    </script>
-</body>
-</html>
+  const loginToCrunchyroll = async () => {
+    // Simulate Crunchyroll login (replace with actual API request)
+    const response = await fetch("/api/login");
+    const data = await response.json();
+    setUser(data.user);
+  };
+
+  const fetchVideos = async () => {
+    if (!user) {
+      alert("Please log in first!");
+      return;
+    }
+    const response = await fetch(`/api/fetch-videos?user=${user}`);
+    const data = await response.json();
+    setClips(data.clips);
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <h1 className="text-3xl font-bold mb-4">Crunchyroll AMV Auto-Clipping</h1>
+      
+      {!user ? (
+        <button onClick={loginToCrunchyroll} className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-700">
+          Login to Crunchyroll
+        </button>
+      ) : (
+        <>
+          <p>Welcome, {user}!</p>
+          <button onClick={fetchVideos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
+            Fetch Clips
+          </button>
+        </>
+      )}
+
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        {clips.map((clip, index) => (
+          <video key={index} src={clip} controls className="w-60 mt-2" />
+        ))}
+      </div>
+    </div>
+  );
+}
