@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crunchyroll AMV Auto</title>
+</head>
+<body>
+    <h1>Crunchyroll AMV Auto-Clipping</h1>
+    <button onclick="fetchVideos()">Fetch Clips</button>
+    <div id="video-container"></div>
+
+    <script>
+        async function fetchVideos() {
+            let response = await fetch('https://api.github.com/repos/your-username/crunchyroll-amv-auto/releases/latest');
+            let data = await response.json();
+            let videoContainer = document.getElementById('video-container');
+            videoContainer.innerHTML = "";
+
+            data.assets.forEach(asset => {
+                let video = document.createElement("video");
+                video.src = asset.browser_download_url;
+                video.controls = true;
+                video.width = 320;
+                videoContainer.appendChild(video);
+            });
+        }
+    </script>
+</body>
+</html>
