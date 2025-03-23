@@ -1,4 +1,3 @@
 export default function handler(req, res) {
-  // Simulate user session check
-  res.status(200).json({ user: "crunchyroll-user" });
+  res.redirect("https://www.crunchyroll.com/login");
 }
