@@ -1,11 +1,13 @@
 export default async function handler(req, res) {
-  const topAnime = ["One Piece", "Attack on Titan", "Demon Slayer", "Jujutsu Kaisen", "Chainsaw Man", "Naruto", "Bleach", "My Hero Academia", "Black Clover", "Vinland Saga"];
-
-  // Simulating fetching clips from Crunchyroll (replace with real API call)
-  const clips = topAnime.map((anime) => ({
-    anime,
-    clips: Array(10).fill(`https://fake-video-url.com/${anime}.mp4`), // Replace with actual video links
-  }));
-
-  res.status(200).json({ clips });
+  console.log("Fetching anime clips...");
+  
+  res.status(200).json({
+    status: "success",
+    message: "Fetched top 10 anime clips",
+    clips: [
+      { anime: "One Piece", video: "https://fake-video-url.com/onepiece.mp4" },
+      { anime: "Attack on Titan", video: "https://fake-video-url.com/aot.mp4" },
+      { anime: "Demon Slayer", video: "https://fake-video-url.com/demonslayer.mp4" },
+    ],
+  });
 }
